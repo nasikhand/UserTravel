@@ -20,14 +20,20 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import model.PaketPerjalanan;
 
 public class PaketItemPanel extends JPanel {
+    private PaketPerjalanan paketObject; 
 
     public PaketItemPanel(PaketPerjalanan pkg, PaketController controller) {
+        this.paketObject = pkg;
+        
         setLayout(new BorderLayout(15, 15));
         setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(new Color(220, 220, 220)), // Border luar
@@ -74,15 +80,46 @@ public class PaketItemPanel extends JPanel {
         buttonPanel.setOpaque(false);
         
         JButton detailButton = new JButton("Lihat Detail");
-        JButton pesanButton = new JButton("Pesan Sekarang");
+        JButton pesanButton = new JButton("Pesan Cepat");;
         
         detailButton.addActionListener(e -> controller.showTripDetails(pkg));
         
         // Styling tombol
         detailButton.putClientProperty(FlatClientProperties.STYLE, "arc: 15;");
-        pesanButton.setBackground(new Color(0, 102, 102));
+        pesanButton.setBackground(new Color(0, 153, 102));
         pesanButton.setForeground(Color.WHITE);
         pesanButton.putClientProperty(FlatClientProperties.STYLE, "arc: 15;");
+        
+        detailButton.addActionListener(e -> controller.showTripDetails(pkg));
+        
+        // Modifikasi ActionListener untuk tombol pesanButton
+        pesanButton.addActionListener(e -> {
+            // Minta input jumlah penumpang
+            String jumlahPenumpangStr = JOptionPane.showInputDialog(
+                    this, 
+                    "Masukkan jumlah penumpang:", 
+                    "Jumlah Penumpang untuk " + pkg.getNamaPaket(), 
+                    JOptionPane.PLAIN_MESSAGE
+            );
+
+            if (jumlahPenumpangStr != null && !jumlahPenumpangStr.trim().isEmpty()) {
+                try {
+                    int jumlahOrang = Integer.parseInt(jumlahPenumpangStr.trim());
+                    if (jumlahOrang > 0 && jumlahOrang <= pkg.getKuota()) {
+                        // Dapatkan frame induk (SearchResultView) untuk ditutup
+                        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+                        if (parentFrame != null) {
+                            parentFrame.dispose();
+                        }
+                        new BookingView(this.paketObject, jumlahOrang).setVisible(true);
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Jumlah penumpang tidak valid atau melebihi kuota (" + pkg.getKuota() + ").", "Input Tidak Valid", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (NumberFormatException nfe) {
+                    JOptionPane.showMessageDialog(this, "Harap masukkan angka yang valid untuk jumlah penumpang.", "Input Salah", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
         
         buttonPanel.add(detailButton);
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Spasi antar tombol

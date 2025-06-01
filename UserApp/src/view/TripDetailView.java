@@ -139,11 +139,14 @@ public class TripDetailView extends JFrame {
         JButton bookButton = new JButton("Pesan");
         bookButton.setBackground(new Color(0, 102, 102));
         bookButton.setForeground(Color.WHITE);
+        bookButton.setFont(new Font("SansSerif", Font.BOLD, 14)); // Tambahkan font
+        bookButton.setPreferredSize(new Dimension(0, 40));
         
         bookButton.addActionListener(e -> {
-            int penumpang = (int) jumlahOrangSpinner.getValue();
-            new BookingView(this.paket, penumpang).setVisible(true);
-            this.dispose(); // Tutup jendela detail
+            int penumpangDariSpinner = (int) jumlahOrangSpinner.getValue();
+            // Buka BookingView dengan data PaketPerjalanan dan jumlah penumpang
+            new BookingView(this.paket, penumpangDariSpinner).setVisible(true);
+            this.dispose(); // Tutup jendela detail saat ini
         });
 
         panel.add(formPanel, BorderLayout.CENTER);

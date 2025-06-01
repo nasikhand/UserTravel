@@ -89,7 +89,13 @@ public class HomeView extends JFrame {
         // Tombol navigasi
         sideBar.add(createNavButton("Dashboard", "assets/icons/home.png"));
         sideBar.add(createNavButton("Cari Paket Perjalanan", "assets/icons/search.png"));
-        sideBar.add(createNavButton("Buat Custom Trip", "assets/icons/custom.png"));
+        JButton customTripButton = createNavButton("Buat Custom Trip", "assets/icons/custom.png");
+        // Tambahkan ActionListener ini:
+        customTripButton.addActionListener(e -> {
+            new CustomTripBuilderView().setVisible(true);
+            this.dispose(); // Tutup HomeView
+        });
+        sideBar.add(customTripButton);
         sideBar.add(createNavButton("Profil Saya", "assets/icons/profile.png"));
         
         // Mendorong tombol di bawahnya ke dasar sidebar

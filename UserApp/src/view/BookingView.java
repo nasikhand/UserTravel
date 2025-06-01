@@ -4,7 +4,7 @@
  */
 package view;
 
-import com.toedter.calendar.JDateChooser; // Anda perlu menambahkan library JCalendar
+import com.toedter.calendar.JDateChooser; // Pastikan JCalendar library sudah ada
 import controller.BookingController;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -12,7 +12,10 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -40,161 +43,259 @@ import model.Penumpang;
 public class BookingView extends JFrame {
 
     private final PaketPerjalanan paket;
-    private final int jumlahPenumpang;
-    private final BookingController controller;
-    private final List<JPanel> formPenumpangPanels = new ArrayList<>();
+    private final int jumlahPenumpangInput; // Nama diubah agar lebih jelas
+    private final BookingController bookingController; // Diubah menjadi bookingController
+    private final List<JPanel> listPanelFormPenumpang = new ArrayList<>(); // Nama diubah
+    private final NumberFormat formatRupiah;
 
     public BookingView(PaketPerjalanan paket, int jumlahPenumpang) {
         this.paket = paket;
-        this.jumlahPenumpang = jumlahPenumpang;
-        this.controller = new BookingController();
+        this.jumlahPenumpangInput = jumlahPenumpang;
+        this.bookingController = new BookingController(); // Inisialisasi controller
+        this.formatRupiah = NumberFormat.getCurrencyInstance(new Locale("in", "ID"));
         
-        setTitle("Lengkapi Pemesanan Anda");
-        setSize(1000, 650);
+        setTitle("Lengkapi Detail Pemesanan Paket");
+        setSize(1050, 700); // Sedikit lebih lebar
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         
-        JPanel mainPanel = new JPanel(new BorderLayout(15, 15));
+        JPanel mainPanel = new JPanel(new BorderLayout(20, 15)); // Tambah gap horizontal
         mainPanel.setBorder(new EmptyBorder(15, 15, 15, 15));
+        mainPanel.setBackground(new Color(245, 245, 245)); // Background abu-abu muda
         
-        mainPanel.add(createPassengerFormPanel(), BorderLayout.CENTER);
-        mainPanel.add(createSummaryPanel(), BorderLayout.EAST);
+        mainPanel.add(createPanelFormPenumpang(), BorderLayout.CENTER);
+        mainPanel.add(createPanelRingkasan(), BorderLayout.EAST);
         
         add(mainPanel);
     }
     
-    private JScrollPane createPassengerFormPanel() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+    private JScrollPane createPanelFormPenumpang() {
+        JPanel panelKonten = new JPanel();
+        panelKonten.setLayout(new BoxLayout(panelKonten, BoxLayout.Y_AXIS));
+        panelKonten.setBackground(Color.WHITE);
+        panelKonten.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(Color.LIGHT_GRAY),
+            new EmptyBorder(15,15,15,15)
+        ));
         
-        JLabel title = new JLabel("Data Penumpang");
+        JLabel title = new JLabel("Isi Data Penumpang");
         title.setFont(new Font("SansSerif", Font.BOLD, 24));
-        panel.add(title);
+        title.setAlignmentX(Component.LEFT_ALIGNMENT);
+        panelKonten.add(title);
+        panelKonten.add(Box.createRigidArea(new Dimension(0, 15)));
         
-        // Buat form untuk setiap penumpang
-        for (int i = 1; i <= jumlahPenumpang; i++) {
-            JPanel formPanel = createSinglePassengerForm(i);
-            formPenumpangPanels.add(formPanel); // Simpan referensi ke panel
-            panel.add(formPanel);
-            panel.add(Box.createRigidArea(new Dimension(0, 15)));
+        listPanelFormPenumpang.clear();
+        for (int i = 1; i <= jumlahPenumpangInput; i++) {
+            JPanel singleFormPanel = createFormPenumpangTunggal(i);
+            listPanelFormPenumpang.add(singleFormPanel); 
+            panelKonten.add(singleFormPanel);
+            panelKonten.add(Box.createRigidArea(new Dimension(0, 20)));
         }
         
-        JScrollPane scrollPane = new JScrollPane(panel);
-        scrollPane.setBorder(null);
+        JScrollPane scrollPane = new JScrollPane(panelKonten);
+        scrollPane.setBorder(null); // Hapus border default scrollpane
         return scrollPane;
     }
 
-    private JPanel createSinglePassengerForm(int passengerNumber) {
-        JPanel formPanel = new JPanel(new GridLayout(0, 2, 10, 10));
-        formPanel.setBorder(BorderFactory.createTitledBorder("Penumpang " + passengerNumber));
-        
-        // Tambahkan komponen ke dalam panel dengan nama unik untuk bisa diambil datanya nanti
-        formPanel.add(new JLabel("Nama Lengkap:"));
-        JTextField namaField = new JTextField();
-        namaField.setName("nama");
-        formPanel.add(namaField);
-        
-        formPanel.add(new JLabel("Jenis Kelamin:"));
-        JRadioButton pria = new JRadioButton("Pria");
-        pria.setActionCommand("pria");
-        JRadioButton wanita = new JRadioButton("Wanita");
-        wanita.setActionCommand("wanita");
-        ButtonGroup group = new ButtonGroup();
-        group.add(pria);
-        group.add(wanita);
-        JPanel genderPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        genderPanel.add(pria);
-        genderPanel.add(wanita);
-        genderPanel.setName("gender");
-        formPanel.add(genderPanel);
-        
-        formPanel.add(new JLabel("Tanggal Lahir:"));
-        JDateChooser tglLahir = new JDateChooser();
-        tglLahir.setName("tanggalLahir");
-        formPanel.add(tglLahir);
+    private JPanel createFormPenumpangTunggal(int nomorPenumpang) {
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        formPanel.setOpaque(false); // Transparan agar background panelKonten terlihat
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        formPanel.add(new JLabel("Nomor Telepon:"));
-        JTextField teleponField = new JTextField();
-        teleponField.setName("telepon");
-        formPanel.add(teleponField);
+        formPanel.setBorder(BorderFactory.createTitledBorder(
+            BorderFactory.createLineBorder(Color.GRAY), 
+            "Penumpang " + nomorPenumpang,
+            TitledBorder.DEFAULT_JUSTIFICATION,
+            TitledBorder.DEFAULT_POSITION,
+            new Font("SansSerif", Font.BOLD, 14)
+        ));
         
-        formPanel.add(new JLabel("Email:"));
+        Font labelFont = new Font("SansSerif", Font.PLAIN, 14);
+        Font fieldFont = new Font("SansSerif", Font.PLAIN, 14);
+
+        // Nama Lengkap
+        gbc.gridx = 0; gbc.gridy = 0;
+        JLabel namaLabel = new JLabel("Nama Lengkap:");
+        namaLabel.setFont(labelFont);
+        formPanel.add(namaLabel, gbc);
+        gbc.gridx = 1; gbc.weightx = 1.0; // Agar field bisa expand
+        JTextField namaField = new JTextField();
+        namaField.setName("namaPenumpang");
+        namaField.setFont(fieldFont);
+        formPanel.add(namaField, gbc);
+        gbc.weightx = 0; // Reset
+
+        // Jenis Kelamin
+        gbc.gridy++; gbc.gridx = 0;
+        JLabel genderLabel = new JLabel("Jenis Kelamin:");
+        genderLabel.setFont(labelFont);
+        formPanel.add(genderLabel, gbc);
+        gbc.gridx = 1;
+        JRadioButton priaRadio = new JRadioButton("Pria");
+        priaRadio.setFont(labelFont); priaRadio.setOpaque(false);
+        priaRadio.setActionCommand("pria");
+        JRadioButton wanitaRadio = new JRadioButton("Wanita");
+        wanitaRadio.setFont(labelFont); wanitaRadio.setOpaque(false);
+        wanitaRadio.setActionCommand("wanita");
+        ButtonGroup genderGroup = new ButtonGroup();
+        genderGroup.add(priaRadio);
+        genderGroup.add(wanitaRadio);
+        JPanel panelGender = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+        panelGender.setOpaque(false);
+        panelGender.add(priaRadio);
+        panelGender.add(wanitaRadio);
+        panelGender.setName("grupJenisKelamin"); // Untuk identifikasi ButtonGroup
+        formPanel.add(panelGender, gbc);
+        
+        // Tanggal Lahir
+        gbc.gridy++; gbc.gridx = 0;
+        JLabel tglLahirLabel = new JLabel("Tanggal Lahir:");
+        tglLahirLabel.setFont(labelFont);
+        formPanel.add(tglLahirLabel, gbc);
+        gbc.gridx = 1;
+        JDateChooser tglLahirChooser = new JDateChooser();
+        tglLahirChooser.setFont(fieldFont);
+        tglLahirChooser.setDateFormatString("dd MMMM yyyy");
+        tglLahirChooser.setName("tanggalLahirPenumpang");
+        formPanel.add(tglLahirChooser, gbc);
+
+        // Nomor Telepon
+        gbc.gridy++; gbc.gridx = 0;
+        JLabel teleponLabel = new JLabel("Nomor Telepon:");
+        teleponLabel.setFont(labelFont);
+        formPanel.add(teleponLabel, gbc);
+        gbc.gridx = 1;
+        JTextField teleponField = new JTextField();
+        teleponField.setName("nomorTeleponPenumpang");
+        teleponField.setFont(fieldFont);
+        formPanel.add(teleponField, gbc);
+        
+        // Email
+        gbc.gridy++; gbc.gridx = 0;
+        JLabel emailLabel = new JLabel("Email (Opsional):");
+        emailLabel.setFont(labelFont);
+        formPanel.add(emailLabel, gbc);
+        gbc.gridx = 1;
         JTextField emailField = new JTextField();
-        emailField.setName("email");
-        formPanel.add(emailField);
+        emailField.setName("emailPenumpang");
+        emailField.setFont(fieldFont);
+        formPanel.add(emailField, gbc);
         
         return formPanel;
     }
     
-    private JPanel createSummaryPanel() {
+    private JPanel createPanelRingkasan() {
         JPanel panel = new JPanel(new BorderLayout(10, 20));
-        panel.setPreferredSize(new Dimension(300, 0));
-        panel.setBorder(BorderFactory.createTitledBorder(null, "Ringkasan Trip", TitledBorder.CENTER, TitledBorder.TOP, new Font("SansSerif", Font.BOLD, 16)));
+        panel.setPreferredSize(new Dimension(320, 0)); // Lebar panel ringkasan
+        panel.setBackground(Color.WHITE);
+        panel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(Color.LIGHT_GRAY),
+            new EmptyBorder(15,15,15,15)
+        ));
+        
+        JLabel title = new JLabel("Ringkasan Pemesanan");
+        title.setFont(new Font("SansSerif", Font.BOLD, 18));
+        title.setBorder(new EmptyBorder(0,0,10,0));
         
         // Info Trip
-        JPanel tripInfoPanel = new JPanel();
-        tripInfoPanel.setLayout(new BoxLayout(tripInfoPanel, BoxLayout.Y_AXIS));
-        tripInfoPanel.add(new JLabel(paket.getNamaPaket())).setFont(new Font("SansSerif", Font.BOLD, 18));
-        tripInfoPanel.add(new JLabel(new Date().toString())); // Tanggal contoh
-        tripInfoPanel.add(new JLabel(jumlahPenumpang + " Penumpang"));
+        JPanel panelInfoTrip = new JPanel();
+        panelInfoTrip.setLayout(new BoxLayout(panelInfoTrip, BoxLayout.Y_AXIS));
+        panelInfoTrip.setOpaque(false);
+        
+        JLabel namaPaketLabel = new JLabel("<html><body style='width:250px'><b>Paket:</b> " + paket.getNamaPaket() + "</body></html>");
+        namaPaketLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        panelInfoTrip.add(namaPaketLabel);
+        panelInfoTrip.add(Box.createRigidArea(new Dimension(0,5)));
+        
+        JLabel jumlahPenumpangLabel = new JLabel("<b>Jumlah Penumpang:</b> " + jumlahPenumpangInput + " orang");
+        jumlahPenumpangLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        panelInfoTrip.add(jumlahPenumpangLabel);
+        panelInfoTrip.add(Box.createRigidArea(new Dimension(0,15)));
 
         // Info Harga
-        JPanel pricePanel = new JPanel(new BorderLayout());
-        BigDecimal totalHarga = paket.getHarga().multiply(new BigDecimal(jumlahPenumpang));
-        NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(new Locale("in", "ID"));
-        JLabel hargaLabel = new JLabel(formatRupiah.format(totalHarga));
-        hargaLabel.setFont(new Font("SansSerif", Font.BOLD, 22));
-        pricePanel.add(new JLabel("Total Harga:"), BorderLayout.NORTH);
-        pricePanel.add(hargaLabel, BorderLayout.CENTER);
+        JPanel panelHarga = new JPanel(new BorderLayout());
+        panelHarga.setOpaque(false);
+        BigDecimal totalHarga = paket.getHarga().multiply(new BigDecimal(jumlahPenumpangInput));
+        
+        JLabel labelTotal = new JLabel("Total Pembayaran:");
+        labelTotal.setFont(new Font("SansSerif", Font.BOLD, 16));
+        
+        JLabel nilaiHargaLabel = new JLabel(formatRupiah.format(totalHarga));
+        nilaiHargaLabel.setFont(new Font("SansSerif", Font.BOLD, 22));
+        nilaiHargaLabel.setForeground(new Color(0, 102, 102));
+        
+        panelHarga.add(labelTotal, BorderLayout.NORTH);
+        panelHarga.add(nilaiHargaLabel, BorderLayout.CENTER);
         
         // Panel Bawah (Checkbox & Tombol)
-        JPanel bottomPanel = new JPanel(new BorderLayout(10,10));
-        JCheckBox termsCheckbox = new JCheckBox("Saya menerima Syarat dan Ketentuan.");
-        JButton confirmButton = new JButton("Konfirmasi & Pesan");
-        confirmButton.setBackground(new Color(0, 102, 102));
-        confirmButton.setForeground(Color.WHITE);
+        JPanel panelBawah = new JPanel(new BorderLayout(10,10));
+        panelBawah.setOpaque(false);
+        JCheckBox termsCheckbox = new JCheckBox("Saya menyetujui Syarat dan Ketentuan yang berlaku.");
+        termsCheckbox.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        termsCheckbox.setOpaque(false);
+
+        JButton tombolKonfirmasi = new JButton("Konfirmasi & Pesan Sekarang");
+        tombolKonfirmasi.setFont(new Font("SansSerif", Font.BOLD, 14));
+        tombolKonfirmasi.setBackground(new Color(0, 102, 102));
+        tombolKonfirmasi.setForeground(Color.WHITE);
+        tombolKonfirmasi.setPreferredSize(new Dimension(0, 45)); // Tinggi tombol
         
-        confirmButton.addActionListener(e -> {
+        tombolKonfirmasi.addActionListener(e -> {
             if (!termsCheckbox.isSelected()) {
-                JOptionPane.showMessageDialog(this, "Anda harus menyetujui Syarat dan Ketentuan.", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Anda harus menyetujui Syarat dan Ketentuan untuk melanjutkan.", "Peringatan", JOptionPane.WARNING_MESSAGE);
                 return;
             }
             
-            // Kumpulkan data dari semua form penumpang
-            List<Penumpang> penumpangList = new ArrayList<>();
-            for (JPanel form : formPenumpangPanels) {
+            List<Penumpang> daftarPenumpang = new ArrayList<>();
+            for (JPanel panelForm : listPanelFormPenumpang) {
                 Penumpang p = new Penumpang();
-                // Loop melalui komponen untuk mendapatkan data
-                for(Component comp : form.getComponents()) {
+                // Loop untuk mengambil data dari setiap field di panelForm
+                for(Component comp : panelForm.getComponents()) {
                     if(comp.getName() != null) {
                         switch(comp.getName()) {
-                            case "nama": p.setNamaPenumpang(((JTextField)comp).getText()); break;
-                            case "telepon": p.setNomorTelepon(((JTextField)comp).getText()); break;
-                            case "email": p.setEmail(((JTextField)comp).getText()); break;
-                            case "tanggalLahir": p.setTanggalLahir(((JDateChooser)comp).getDate()); break;
-                            case "gender":
-                                JPanel genderPanel = (JPanel) comp;
-                                for(Component radio : genderPanel.getComponents()){
-                                    JRadioButton r = (JRadioButton) radio;
-                                    if(r.isSelected()){
-                                        p.setJenisKelamin(r.getActionCommand());
+                            case "namaPenumpang": p.setNamaPenumpang(((JTextField)comp).getText().trim()); break;
+                            case "nomorTeleponPenumpang": p.setNomorTelepon(((JTextField)comp).getText().trim()); break;
+                            case "emailPenumpang": p.setEmail(((JTextField)comp).getText().trim()); break;
+                            case "tanggalLahirPenumpang": p.setTanggalLahir(((JDateChooser)comp).getDate()); break;
+                            case "grupJenisKelamin": // Handle ButtonGroup
+                                JPanel panelRadio = (JPanel) comp;
+                                for(Component radioComp : panelRadio.getComponents()){
+                                    if(radioComp instanceof JRadioButton){
+                                        JRadioButton rb = (JRadioButton) radioComp;
+                                        if(rb.isSelected()){
+                                            p.setJenisKelamin(rb.getActionCommand());
+                                        }
                                     }
                                 }
                                 break;
                         }
                     }
                 }
-                penumpangList.add(p);
+                // Validasi dasar per penumpang
+                if (p.getNamaPenumpang().isEmpty() || p.getJenisKelamin() == null || p.getTanggalLahir() == null) {
+                     JOptionPane.showMessageDialog(this, "Harap lengkapi Nama, Jenis Kelamin, dan Tanggal Lahir untuk semua penumpang.", "Data Tidak Lengkap", JOptionPane.WARNING_MESSAGE);
+                     return; // Hentikan proses jika ada data wajib yang kosong
+                }
+                daftarPenumpang.add(p);
             }
-            controller.processBooking(paket, penumpangList);
+            bookingController.processPaketBooking(paket, jumlahPenumpangInput, daftarPenumpang, this);
         });
 
-        bottomPanel.add(termsCheckbox, BorderLayout.NORTH);
-        bottomPanel.add(confirmButton, BorderLayout.SOUTH);
+        panelBawah.add(termsCheckbox, BorderLayout.NORTH);
+        panelBawah.add(tombolKonfirmasi, BorderLayout.CENTER);
         
-        panel.add(tripInfoPanel, BorderLayout.NORTH);
-        panel.add(pricePanel, BorderLayout.CENTER);
-        panel.add(bottomPanel, BorderLayout.SOUTH);
+        panel.add(title, BorderLayout.NORTH);
+        panel.add(panelInfoTrip, BorderLayout.CENTER);
+        
+        JPanel southContainer = new JPanel(new BorderLayout(0,15)); // Container untuk harga dan tombol
+        southContainer.setOpaque(false);
+        southContainer.add(panelHarga, BorderLayout.NORTH);
+        southContainer.add(panelBawah, BorderLayout.SOUTH);
+        
+        panel.add(southContainer, BorderLayout.SOUTH);
 
         return panel;
     }
