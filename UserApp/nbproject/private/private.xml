@@ -3,31 +3,23 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserApp/src/app/MainApp.java</file>
-            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserApp/src/config/DatabaseConnection.java</file>
-            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserApp/src/dao/UserDAO.java</file>
-            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserApp/src/controller/AuthController.java</file>
-            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserApp/src/view/LoginView.java</file>
-            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserApp/src/model/User.java</file>
-            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserApp/src/view/RegisterView.java</file>
-            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserApp/src/view/HomeView.java</file>
-            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserApp/src/view/ForgotPasswordView.java</file>
-            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserApp/src/app/ThemeManager.java</file>
-            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserApp/src/model/PaketPerjalanan.java</file>
-            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserApp/src/dao/PaketPerjalananDAO.java</file>
-            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserApp/src/controller/PaketController.java</file>
-            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserApp/src/view/SearchResultView.java</file>
-            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserApp/src/view/PaketItemPanel.java</file>
-            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserApp/src/view/TripDetailView.java</file>
-            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserApp/src/model/Reservasi.java</file>
-            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserApp/src/model/Penumpang.java</file>
-            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserApp/src/dao/BookingDAO.java</file>
-            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserApp/src/controller/BookingController.java</file>
-            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserApp/src/view/BookingView.java</file>
-            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserApp/src/model/Destinasi.java</file>
-            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserApp/src/dao/DestinasiDAO.java</file>
-            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserApp/src/controller/CustomTripController.java</file>
-            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserApp/src/view/CustomTripBuilderView.java</file>
+            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserTravel/UserApp/src/view/HomeView.java</file>
+            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserTravel/UserApp/src/view/StepIndicatorPanel.java</file>
+            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserTravel/UserApp/src/view/CustomTripBuilderView.java</file>
+            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserTravel/UserApp/src/controller/CustomTripController.java</file>
+            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserTravel/UserApp/src/model/CustomTrip.java</file>
+            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserTravel/UserApp/src/model/RincianCustomTrip.java</file>
+            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserTravel/UserApp/src/dao/CustomTripDAO.java</file>
+            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserTravel/UserApp/src/view/LoginView.java</file>
+            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserTravel/UserApp/src/view/TripDetailView.java</file>
+            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserTravel/UserApp/src/controller/BookingController.java</file>
+            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserTravel/UserApp/src/view/BookingView.java</file>
+            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserTravel/UserApp/src/view/PaketItemPanel.java</file>
+            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserTravel/UserApp/src/dao/UserDAO.java</file>
+            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserTravel/UserApp/src/controller/ProfileController.java</file>
+            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserTravel/UserApp/src/view/ProfileView.java</file>
+            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserTravel/UserApp/src/controller/AuthController.java</file>
+            <file>file:/D:/Kuliah/Semester%204/Pemrograman%20Berbasis%20Objek%20F081/Projek%20Akhir%20UAS/UserTravel/UserApp/src/model/User.java</file>
         </group>
     </open-files>
 </project-private>

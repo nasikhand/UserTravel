@@ -33,7 +33,7 @@ public class AuthController {
             return;
         }
         if (userDAO.validateUser(trimmedEmail, password)) {
-            new HomeView().setVisible(true);
+            new HomeView(trimmedEmail).setVisible(true); // <-- BARIS BARU: kirim email
             loginView.dispose();
         } else {
             JOptionPane.showMessageDialog(loginView, "Email atau Password salah.", "Login Gagal", JOptionPane.ERROR_MESSAGE);

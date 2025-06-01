@@ -4,6 +4,11 @@
  */
 package model;
 
+import java.math.BigDecimal; // Jika Anda punya field harga di User, jika tidak, bisa dihapus
+import java.util.Date;
+import java.util.List; // Jika ada list di User, jika tidak, bisa dihapus
+import java.util.ArrayList; 
+
 public class User {
     private int id;
     private String namaLengkap;
@@ -11,6 +16,7 @@ public class User {
     private String password;
     private String noTelepon;
     private String alamat;
+    private String gambarPath;
 
     // Getters and Setters
     public int getId() { return id; }
@@ -25,4 +31,11 @@ public class User {
     public void setNoTelepon(String noTelepon) { this.noTelepon = noTelepon; }
     public String getAlamat() { return alamat; }
     public void setAlamat(String alamat) { this.alamat = alamat; }
+    public String getGambarPath() { // <-- GETTER BARU
+        return gambarPath;
+    }
+
+    public void setGambarPath(String gambarPath) { // <-- SETTER BARU
+        this.gambarPath = gambarPath;
+    }
 }
